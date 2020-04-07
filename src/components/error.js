@@ -2,7 +2,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import {Button} from 'react-bootstrap';
 const redirectToGit = () => {
-    window.open('https://github.com/gurindernarang/json-server', '_blank');
+    window.open('https://github.com/gurindernarang/json-server#how-to-setup-json-server', '_blank');
 }
 const error = () =>(
     <Card>
