@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import {Row} from 'react-bootstrap';
 import '../App.css';
 import Error from './error';
+import TableView from './tableView';
 
 class posts extends Component{
     constructor(props) {
         super(props)    
-        //State
         this.state = {
-            posts : [],
+            dataType : 'posts',
+            fields : {'#':'id','Title':'title','Content':'body','User Id':'userId'},
+            data: [],
             error: null
         }
     }
@@ -42,32 +43,14 @@ class posts extends Component{
     }
     render() {
         if(this.state.error){
-            console.log('error',this.state.error);
-            return <Error />;
+            return (
+                <Error />);
         } else {
-        return (!this.state.loading?<Table striped bordered hover variant="dark">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Content</th>
-            <th>User Id</th>
-          </tr>
-        </thead>
-        <tbody>
-            {this.state.posts.map(post =>
-                (<tr>
-                    <td>{post.id}</td>
-                    <td>{post.title}</td>
-                    <td>{post.body}</td>
-                    <td>{post.userId}</td>
-                </tr>)
-                )
-            }
-        </tbody>
-      </Table>
-      : <Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
-        )
+            return (
+                !this.state.loading ?
+                <TableView type = {this.state.dataType} data = {this.state.posts} fields = {this.state.fields} />
+                :<Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
+            )
         }
     }
 }

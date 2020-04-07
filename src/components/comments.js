@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
 import Spinner from 'react-bootstrap/Spinner';
 import {Row} from 'react-bootstrap';
 import '../App.css';
 import Error from './error';
+import TableView from './tableView';
 
 class comment extends Component{
     constructor(props) {
-        super(props)    
-        //State
+        super(props)
         this.state = {
-            comments : [],
+            dataType : 'comments',
+            fields : {'#':'id','Title':'name','Comment':'body','User Email':'email','PostId':'postId'},
+            data: [],
             error: null
         }
     }
@@ -22,7 +23,7 @@ class comment extends Component{
         axios.get('http://localhost:3001/comments')
         .then((response) => {
             this.setState({
-                comments: response.data,
+                data: response.data,
                 loading : false
             });
         })
@@ -42,36 +43,15 @@ class comment extends Component{
     }
     render() {
         if(this.state.error){
-            console.log('error',this.state.error);
-            return <Error />;
+            return (
+                <Error />);
         } else {
-        return (!this.state.loading?<Table striped bordered hover variant="dark">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Comment</th>
-            <th>User Email</th>
-            <th>PostId</th>
-          </tr>
-        </thead>
-        <tbody>
-            {this.state.comments.map(comment =>
-                (<tr>
-                    <td>{comment.id}</td>
-                    <td>{comment.name}</td>
-                    <td>{comment.body}</td>
-                    <td>{comment.email}</td>
-                    <td>{comment.postId}</td>
-                </tr>)
-                )
-            }
-        </tbody>
-      </Table>
-      : <Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
-        )
+            return (
+                !this.state.loading ?
+                <TableView type = {this.state.dataType} data = {this.state.data} fields = {this.state.fields} />
+                :<Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
+            )
         }
     }
 }
-
 export default comment;
