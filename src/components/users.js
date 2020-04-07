@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
 import {Row} from 'react-bootstrap';
 import '../App.css';
 import Error from './error';
 import TableView from './tableView';
+import GetRequest from '../utils/apiRequests';
 
 class users extends Component{
     constructor(props) {
@@ -12,7 +12,6 @@ class users extends Component{
         this.state = {
             dataType : 'profiles',
             fields : {'#':'id','Name':'name','User Name':'username','User Email':'email','Address':'address.street','Phone':'phone','Website':'website'},
-            data: [],
             error: null
         }
     }
@@ -20,22 +19,18 @@ class users extends Component{
         this.setState({
             loading : true
         });
-        axios.get('http://localhost:3001/profiles')
-        .then((response) => {
-            this.setState({
-                users: response.data,
-                loading : false
-            });
-        })
-        .catch( (error) => {
-            console.log("Error",error);
-            this.setState({
-                error: error,
-                loading : false
-            });
-        })
-        .then(function () {
-            console.log("always executed");
+        GetRequest(this.state.dataType,(response)=>{
+            if(response.data) {
+                this.setState({
+                    users: response.data,
+                    loading : false
+                });
+            } else {
+                this.setState({
+                    error: true,
+                    loading : false
+                });
+            }
         });
     }
     componentWillMount() {

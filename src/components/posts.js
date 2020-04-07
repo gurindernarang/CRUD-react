@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
 import {Row} from 'react-bootstrap';
 import '../App.css';
 import Error from './error';
 import TableView from './tableView';
+import GetRequest from '../utils/apiRequests';
 
 class posts extends Component{
     constructor(props) {
@@ -12,7 +12,6 @@ class posts extends Component{
         this.state = {
             dataType : 'posts',
             fields : {'#':'id','Title':'title','Content':'body','User Id':'userId'},
-            data: [],
             error: null
         }
     }
@@ -20,22 +19,18 @@ class posts extends Component{
         this.setState({
             loading : true
         });
-        axios.get('http://localhost:3001/posts')
-        .then((response) => {
-            this.setState({
-                posts: response.data,
-                loading : false
-            });
-        })
-        .catch( (error) => {
-            console.log("Error",error);
-            this.setState({
-                error: error,
-                loading : false
-            });
-        })
-        .then(function () {
-            console.log("always executed");
+        GetRequest(this.state.dataType,(response)=>{
+            if(response.data) {
+                this.setState({
+                    posts: response.data,
+                    loading : false
+                });
+            } else {
+                this.setState({
+                    error: true,
+                    loading : false
+                });
+            }
         });
     }
     componentWillMount() {

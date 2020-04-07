@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Table from 'react-bootstrap/Table';
 import { FaTrash } from "react-icons/fa";
+import { deleteRequest } from '../utils/apiRequests';
 
 class tableView extends Component {
     constructor(props){
@@ -10,6 +11,20 @@ class tableView extends Component {
             this.headerArr = Object.keys(props.fields) || [];
             this.rowValues = Object.values(props.fields) || []
         }
+    }
+    delete(id, type){
+        const obj = {
+            id: id,
+            type: type
+        }
+        deleteRequest(obj,(response)=>{
+            if(response.data) {
+                console.log("Successfully deleted");
+                this.render();
+            } else {
+                console.log("Error while deleting this");
+            }
+        });
     }
     render(props){
         return (<Table striped bordered hover variant="dark">
@@ -27,7 +42,7 @@ class tableView extends Component {
                     {this.rowValues.map((row,index) => (
                     <td key={index}>{data[row]}</td>)
                     )}
-                    <td> <FaTrash/> </td>
+                    <td> <FaTrash onClick={() => this.delete(data.id,this.props.type)}/> </td>
                 </tr>)
                 )
             }
