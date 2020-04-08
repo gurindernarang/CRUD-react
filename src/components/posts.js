@@ -5,6 +5,7 @@ import '../App.css';
 import Error from './error';
 import TableView from './tableView';
 import GetRequest from '../utils/apiRequests';
+import {deleteRequest} from '../utils/apiRequests';
 
 class posts extends Component{
     constructor(props) {
@@ -18,7 +19,7 @@ class posts extends Component{
     getPosts() {
         this.setState({
             loading : true
-        });
+        });    
         GetRequest(this.state.dataType,(response)=>{
             if(response.data) {
                 this.setState({
@@ -33,6 +34,19 @@ class posts extends Component{
             }
         });
     }
+    deleteHandler(id,type) {
+        const obj = {
+            id: id,
+            type: type
+        }
+        deleteRequest(obj,(response)=>{
+            if(response.data) {
+                console.log("Successfully deleted");
+            } else {
+                console.log("Error while deleting this");
+            }
+        });
+    }
     componentWillMount() {
         this.getPosts();
     }
@@ -43,10 +57,13 @@ class posts extends Component{
         } else {
             return (
                 !this.state.loading ?
-                <TableView type = {this.state.dataType} data = {this.state.posts} fields = {this.state.fields} />
+                <TableView type = {this.state.dataType} data = {this.state.posts} fields = {this.state.fields} onClickDelete= {this.deleteHandler}/>
                 :<Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
             )
         }
+    }
+    componentDidUpdate(){
+        console.log("HIii");
     }
 }
 
