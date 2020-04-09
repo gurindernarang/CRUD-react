@@ -8,17 +8,22 @@ import GetRequest from '../utils/apiRequests';
 
 class users extends Component{
     constructor(props) {
-        super(props)    
+        console.log("Constructor - Users");
+        super(props);
+        //Always initialize state here   
         this.state = {
             dataType : 'profiles',
             fields : {'#':'id','Name':'name','User Name':'username','User Email':'email','Address':'address.street','Phone':'phone','Website':'website'},
-            error: null
+            error: null,
+            loading : true
         }
     }
+    //Used only when required
+    static getDerivedStateFromProps(props, state) {
+        console.log('getDerivedStateFromProps - Users', props);
+        return state;
+    }
     getusers() {
-        this.setState({
-            loading : true
-        });
         GetRequest(this.state.dataType,(response)=>{
             if(response.data) {
                 this.setState({
@@ -33,10 +38,14 @@ class users extends Component{
             }
         });
     }
-    componentWillMount() {
-        this.getusers();
-    }
+    //In React 17.x, only the UNSAFE_ name will work.
+    //Deprecated don't Use
+    //Moving code to with side effects to componentDidMount
+    // UNSAFE_componentWillMount() {
+    //     this.getPosts();
+    // }
     render() {
+        console.log("Render - Users"); 
         if(this.state.error){
             return (
                 <Error />);
@@ -47,6 +56,10 @@ class users extends Component{
                 :<Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
             )
         }
+    }
+    componentDidMount() {
+        console.log("componentDidMount - Users");
+        this.getusers();
     }
 }
 

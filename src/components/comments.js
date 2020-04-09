@@ -8,17 +8,22 @@ import GetRequest from '../utils/apiRequests';
 
 class comment extends Component{
     constructor(props) {
-        super(props)
+        console.log("Constructor - Users");
+        super(props);
+        //Always initialize state here
         this.state = {
             dataType : 'comments',
             fields : {'#':'id','Title':'name','Comment':'body','User Email':'email','PostId':'postId'},
-            error: null
+            error: null,
+            loading : true
         }
     }
+    //Used only when required
+    static getDerivedStateFromProps(props, state) {
+        console.log('getDerivedStateFromProps - Comments', props);
+        return state;
+    }
     getComments() {
-        this.setState({
-            loading : true
-        });
         GetRequest(this.state.dataType,(response)=>{
             if(response.data) {
                 this.setState({
@@ -33,10 +38,14 @@ class comment extends Component{
             }
         });
     }
-    componentWillMount() {
-        this.getComments();
-    }
+    //In React 17.x, only the UNSAFE_ name will work.
+    //Deprecated don't Use
+    //Moving code to with side effects to componentDidMount
+    // UNSAFE_componentWillMount() {
+    //     this.getPosts();
+    // }
     render() {
+        console.log("Render - Comments"); 
         if(this.state.error){
             return (
                 <Error />);
@@ -47,6 +56,10 @@ class comment extends Component{
                 :<Row className="spinner-center"><Spinner animation="border" variant="dark" /></Row>
             )
         }
+    }
+    componentDidMount() {
+        console.log("componentDidMount - Comments");
+        this.getusers();
     }
 }
 export default comment;

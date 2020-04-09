@@ -11,19 +11,11 @@ function App() {
   return (
     <Container>
       <Router>
-        <header>
-          <Header></Header>
-        </header>
+        <Header></Header>
         <Switch>
-          <Route path="/comments">
-            <Comments />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/">
-            <Posts />
-          </Route>
+          <Route exact path="/"><Posts /></Route>
+          <Route exact path="/comments"><Comments /></Route>
+          <Route exact path="/users"><Users /></Route>
         </Switch>
       </Router>
     </Container>

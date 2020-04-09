@@ -9,17 +9,22 @@ import {deleteRequest} from '../utils/apiRequests';
 
 class posts extends Component{
     constructor(props) {
-        super(props)    
+        console.log("Constructor - Posts");
+        super(props);
+        //Always initialize state here
         this.state = {
             dataType : 'posts',
             fields : {'#':'id','Title':'title','Content':'body','User Id':'userId'},
-            error: null
+            error: null,
+            loading: true
         }
     }
-    getPosts() {
-        this.setState({
-            loading : true
-        });    
+    //Used only when required
+    static getDerivedStateFromProps(props, state) {
+        console.log('getDerivedStateFromProps - Posts', state);
+        return state;
+    }
+    getPosts = () => {    
         GetRequest(this.state.dataType,(response)=>{
             if(response.data) {
                 this.setState({
@@ -34,7 +39,7 @@ class posts extends Component{
             }
         });
     }
-    deleteHandler(id,type) {
+    deleteHandler = (id,type) => {
         const obj = {
             id: id,
             type: type
@@ -42,15 +47,21 @@ class posts extends Component{
         deleteRequest(obj,(response)=>{
             if(response.data) {
                 console.log("Successfully deleted");
+                this.getPosts();
             } else {
                 console.log("Error while deleting this");
             }
         });
     }
-    componentWillMount() {
-        this.getPosts();
-    }
+    //In React 17.x, only the UNSAFE_ name will work.
+    //Deprecated don't Use
+    //Moving code to with side effects to componentDidMount
+    // UNSAFE_componentWillMount() {
+    //     this.getPosts();
+    // }
+
     render() {
+        console.log("Render - Posts"); 
         if(this.state.error){
             return (
                 <Error />);
@@ -62,8 +73,9 @@ class posts extends Component{
             )
         }
     }
-    componentDidUpdate(){
-        console.log("HIii");
+    componentDidMount(){
+        console.log("componentDidMount - Posts");
+        this.getPosts();
     }
 }
 

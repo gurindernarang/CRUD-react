@@ -5,13 +5,23 @@ import { FaTrash, FaUserEdit, FaRegEdit } from "react-icons/fa";
 class tableView extends Component {
     constructor(props){
         super(props);
+        //here props are states of parent components
+        //Props are immutable here
+        console.log("Constructor - TableView");
         if(props.fields && props.type)
         {
             this.headerArr = Object.keys(props.fields) || [];
             this.rowValues = Object.values(props.fields) || []
         }
     }
+    //Used only when required
+    //Returns error as there is no initial state
+    // static getDerivedStateFromProps(props, state) {
+    //     console.log('getDerivedStateFromProps - Posts', props);
+    //     return state;
+    // }
     render(){
+        console.log("Render - TableView");
         return (<Table striped bordered hover variant="dark">
         <thead>
         <tr>
