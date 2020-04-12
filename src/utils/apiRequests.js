@@ -1,23 +1,25 @@
-import axios from 'axios';
-const baseURL = 'http://localhost:3001/';
-const getRequest = (option,callback) => {
-    axios.get(baseURL+option)
+import axios from "axios";
+const baseURL = "http://localhost:3002/";
+const getRequest = (option, callback) => {
+  axios
+    .get(baseURL + option)
     .then((response) => {
-        callback(response);
+      callback(response);
     })
     .catch((error) => {
-        callback(error);
+      callback(error);
     })
     .then(() => {});
-}
-export const deleteRequest = (option,callback) => {
-    axios.delete(baseURL+option.type+'/'+option.id)
+};
+export const deleteRequest = (option, callback) => {
+  axios
+    .delete(baseURL + option.type + "/" + option.id)
     .then((response) => {
-        callback(response);
+      callback(response);
     })
     .catch((error) => {
-        callback(error);
+      callback(error);
     })
     .then(() => {});
-}
+};
 export default getRequest;

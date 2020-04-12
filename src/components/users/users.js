@@ -1,24 +1,25 @@
 import React, { Component } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { Row } from "react-bootstrap";
-import "../App.css";
-import Error from "./error";
-import TableView from "./common/tableView";
-import GetRequest from "../utils/apiRequests";
+import Error from "../error";
+import TableView from "../common/tableView";
+import GetRequest from "../../utils/apiRequests";
 
-class comment extends Component {
+class users extends Component {
   constructor(props) {
     console.log("Constructor - Users");
     super(props);
     //Always initialize state here
     this.state = {
-      dataType: "comments",
+      dataType: "profiles",
       fields: {
         "#": "id",
-        Title: "name",
-        Comment: "body",
+        Name: "name",
+        "User Name": "username",
         "User Email": "email",
-        PostId: "postId",
+        Address: "address.street",
+        Phone: "phone",
+        Website: "website",
       },
       error: null,
       loading: true,
@@ -26,14 +27,14 @@ class comment extends Component {
   }
   //Used only when required
   static getDerivedStateFromProps(props, state) {
-    console.log("getDerivedStateFromProps - Comments", props);
+    console.log("getDerivedStateFromProps - Users", props);
     return state;
   }
-  getComments() {
+  getusers() {
     GetRequest(this.state.dataType, (response) => {
       if (response.data) {
         this.setState({
-          comments: response.data,
+          users: response.data,
           loading: false,
         });
       } else {
@@ -44,6 +45,10 @@ class comment extends Component {
       }
     });
   }
+  editDetailsUser(id) {
+    console.log("Add user", id);
+    window.location.href = "users/" + id;
+  }
   //In React 17.x, only the UNSAFE_ name will work.
   //Deprecated don't Use
   //Moving code to with side effects to componentDidMount
@@ -51,15 +56,16 @@ class comment extends Component {
   //     this.getPosts();
   // }
   render() {
-    console.log("Render - Comments");
+    console.log("Render - Users");
     if (this.state.error) {
       return <Error />;
     } else {
       return !this.state.loading ? (
         <TableView
           type={this.state.dataType}
-          data={this.state.comments}
+          data={this.state.users}
           fields={this.state.fields}
+          onClickAddUser={this.editDetailsUser}
         />
       ) : (
         <Row className="spinner-center">
@@ -69,8 +75,9 @@ class comment extends Component {
     }
   }
   componentDidMount() {
-    console.log("componentDidMount - Comments");
+    console.log("componentDidMount - Users");
     this.getusers();
   }
 }
-export default comment;
+
+export default users;
